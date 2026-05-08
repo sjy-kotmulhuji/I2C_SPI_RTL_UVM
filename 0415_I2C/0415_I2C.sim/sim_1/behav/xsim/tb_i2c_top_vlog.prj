@@ -1,0 +1,12 @@
+# compile verilog/system verilog design source files
+sv xil_defaultlib  \
+"../../../../0415_I2C.srcs/sources_1/new/i2c_master.sv" \
+"../../../../0415_I2C.srcs/sources_1/new/i2c_slave.sv" \
+"../../../../0415_I2C.srcs/sources_1/new/i2c_top.sv" \
+"../../../../0415_I2C.srcs/sim_1/new/tb_i2c_top.sv" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort
