@@ -1,51 +1,21 @@
 `timescale 1ns / 1ps
 
-
-
 module spi_master (
-    input logic clk,
-    input logic reset,
-    input logic cpol,  //idle 0: low, 1: high
-    input logic cpha,  // first sampling, 0: first edge, 1: second edge
-    input logic [7:0] clk_div,
-    input logic [7:0] tx_data,
-    input logic start,
+    input  logic       clk,
+    input  logic       reset,
+    input  logic       cpol,
+    input  logic       cpha,
+    input  logic [7:0] clk_div,
+    input  logic [7:0] tx_data,
+    input  logic       start,
     output logic [7:0] rx_data,
-    output logic done,
-    output logic busy,
-    output logic sclk,
-    output logic mosi,
-    input logic miso,
-    output logic ss_n,
-    output logic [3:0] fnd_digit,
-    output logic [7:0] fnd_data
+    output logic       done,
+    output logic       busy,
+    output logic       sclk,
+    output logic       mosi,
+    input  logic       miso,
+    output logic       ss_n
 );
-
-    logic [7:0] w_rx_data;
-    logic       w_rx_done;
-
-    logic [7:0] display_data_reg;
-
-    assign w_rx_done = done;
-    assign w_rx_data = rx_data;
-
-
-    always_ff @(posedge clk or posedge reset) begin
-        if (reset) begin
-            display_data_reg <= 8'd0;
-        end else if (w_rx_done) begin
-            display_data_reg <= w_rx_data;
-        end
-    end
-
-    // 3. FND 컨트롤러 인스턴스
-    fnd_controller U_FND_CTRL (
-        .clk        (clk),
-        .reset      (reset),
-        .fnd_in_data(display_data_reg),
-        .fnd_digit  (fnd_digit),
-        .fnd_data   (fnd_data)
-    );
 
     typedef enum logic [1:0] {
         IDLE  = 2'b00,
@@ -168,75 +138,4 @@ module spi_master (
             endcase
         end
     end
-endmodule
-
-
-module master_top (
-    input logic clk,
-    input logic reset,
-
-    // 보드의 스위치 및 버튼 입력
-    input logic [7:0] sw_data,   // 보낼 데이터 (스위치 8개)
-    input logic       btn_send,  // 전송 시작 버튼
-    input logic       miso,
-
-    // 외부로 나가는 SPI 핀 (Pmod 점퍼선 연결용)
-    output logic sclk,
-    output logic mosi,
-    output logic ss_n,
-
-    output logic [3:0] fnd_digit,
-    output logic [7:0] fnd_data
-);
-
-    // 1. 버튼 엣지 디텍터 (One-shot Pulse 생성)
-    logic btn_sync1, btn_sync2, btn_d;
-    logic start_pulse;
-
-    always_ff @(posedge clk or posedge reset) begin
-        if (reset) begin
-            {btn_sync2, btn_sync1} <= 2'b00;
-            btn_d <= 1'b0;
-        end else begin
-            {btn_sync2, btn_sync1} <= {
-                btn_sync1, btn_send
-            };  // 메타스테빌리티 방지용 2단 동기화
-            btn_d <= btn_sync2;  // 이전 상태 저장
-        end
-    end
-
-    // 버튼을 누르는 순간 딱 1클럭만 High가 되는 start 펄스
-    assign start_pulse = btn_sync2 & ~btn_d;
-
-
-    // 2. SPI 마스터 IP 인스턴스화
-    spi_master U_SPI_MASTER (
-        .clk  (clk),
-        .reset(reset),
-
-        // 슬레이브 보드 설정과 동일하게 Mode 0 (CPOL=0, CPHA=0) 고정
-        .cpol(1'b0),
-        .cpha(1'b0),
-
-        // SCLK 속도 조절 (예: 시스템 클럭 100MHz일 때 49를 넣으면 SCLK는 약 1MHz)
-        // (100MHz / (2 * (49 + 1))) = 1MHz
-        .clk_div(8'd49),
-
-        .tx_data(sw_data),  // 스위치 값을 전송 데이터로 연결
-        .start(start_pulse),  // 엣지 디텍터를 통과한 딱 1클럭짜리 펄스 연결
-
-        .rx_data(), // 슬레이브에서 받는 데이터가 없으므로 비워둠
-        .done(),    // 필요시 LED에 연결해서 전송 완료 확인용으로 써도 됨
-        .busy(),
-
-        // 외부 핀으로 출력
-        .sclk(sclk),
-        .mosi(mosi),
-        .miso(miso), // 마스터가 받는 핀은 쓰지 않으므로 0으로 고정
-        .ss_n(ss_n),
-
-        .fnd_digit(fnd_digit),
-        .fnd_data (fnd_data)
-    );
-
 endmodule

@@ -14,36 +14,28 @@ module spi_top (
     output logic       done
 );
 
-    logic w_sclk, w_mosi, w_ss_n, w_miso;
+    logic w_sclk, w_mosi, w_miso, w_ss_n;
 
-    spi_slave U_SPI_SLAVE (
-        .clk    (clk),
-        .reset  (reset),
-        .sclk   (w_sclk),
-        .mosi   (w_mosi),
-        .ss_n   (w_ss_n),
-        .miso   (w_miso),
-        .rx_data(),
-        .rx_done(),
-        .busy   ()
-    );
+    spi_master U_SPI_MASTER(
+        .*,
+    .busy(),
+    .sclk(w_sclk),
+    .mosi(w_mosi),
+    .miso(w_miso),
+    .ss_n(w_ss_n)
+);
 
+    spi_slave U_SPI_SLAVE(
+        .*,
+    .sclk(w_sclk),
+    .mosi(w_mosi),
+    .miso(w_miso),
+    .ss_n(w_ss_n),
+    .tx_data(),
+    .rx_data(),
+    .rx_done(),
+    .busy()
+);
 
-    spi_master U_SPI_MASTER (
-        .clk    (clk),
-        .reset  (reset),
-        .cpol   (cpol),
-        .cpha   (cpha),
-        .clk_div(clk_div),
-        .tx_data(tx_data),
-        .start  (start),
-        .rx_data(),
-        .done   (done),
-        .busy   (),
-        .sclk   (w_sclk),
-        .mosi   (w_mosi),
-        .miso   (w_miso),
-        .ss_n   (w_ss_n)
-    );
 
 endmodule

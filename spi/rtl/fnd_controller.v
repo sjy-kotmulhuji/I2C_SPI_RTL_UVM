@@ -153,8 +153,6 @@ module digit_splitter (
     assign digit_100 = (in_data / 100) % 10;
     assign digit_1000 = (in_data / 1000) % 10;
 
-
-
 endmodule
 
 
