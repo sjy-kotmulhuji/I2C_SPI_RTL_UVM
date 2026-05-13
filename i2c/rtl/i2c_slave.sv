@@ -1,34 +1,5 @@
 `timescale 1ns / 1ps
 
-module I2C_Slave (
-
-    input  logic       clk,
-    input  logic       reset,
-    //internal output
-    input        [7:0] tx_data,
-    output logic [7:0] rx_data,  //constranint 바꾸기
-    //exte+rnal I2C port
-    input  logic       scl,
-    inout  wire        sda
-);
-
-    logic sda_o, sda_i;
-
-    //assign sda_i = (sda === 1'bz) ? 1'b1 : sda;
-    assign sda_i = sda;
-    //assign sda   = sda_o;
-    assign sda   = sda_o ? 1'bz : 1'b0;
-
-    i2c_slave U_I2C_SLAVE (
-        .*,
-        .done (),
-        .sda_o(sda_o),
-        .sda_i(sda_i)
-    );
-
-endmodule
-
-
 module i2c_slave (
     input  logic       clk,
     input  logic       reset,
@@ -38,9 +9,13 @@ module i2c_slave (
     output logic       done,
     //external I2C port
     input  logic       scl,
-    input  logic       sda_i,
-    output logic       sda_o
+    inout  wire        sda
 );
+
+    logic sda_o, sda_i;
+
+    assign sda_i = sda;
+    assign sda   = sda_o ? 1'bz : 1'b0;
 
     parameter MY_ADDR = 7'h25;  //7'b0100101
 

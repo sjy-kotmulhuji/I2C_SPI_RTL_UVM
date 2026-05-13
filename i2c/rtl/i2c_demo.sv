@@ -1,9 +1,12 @@
 `timescale 1ns / 1ps
 
-module i2c_demo_top (
+module i2c_demo (
     input  logic       clk,
     input  logic       reset,
-    input  logic [8:0] sw,
+    input  logic       btn_start,
+    input  logic       sw_wr,      //write or read mode select switch
+    input  logic [7:0] sw_data,
+    output logic [7:0] led_data,
     output logic       scl,
     inout  wire        sda
 );
@@ -13,12 +16,12 @@ module i2c_demo_top (
         START,
         ADDR,
         WRITE,
+        READ,
         STOP
     } i2c_state_e;
 
-    localparam SLA_W = {7'h25, 1'b0};  //slave 주소 + rw 데이터(write)
+    localparam SLA = {7'h25};
     i2c_state_e       state;
-
 
     logic             cmd_start;
     logic             cmd_write;
@@ -31,7 +34,7 @@ module i2c_demo_top (
     logic             ack_out;
     logic             busy;
 
-    I2C_Master U_I2C_MASTER (
+    i2c_master U_I2C_MASTER (
         .clk      (clk),
         .reset    (reset),
         .cmd_start(cmd_start),
@@ -48,6 +51,21 @@ module i2c_demo_top (
         .sda      (sda)
     );
 
+    //start button edge detector
+    logic btn_prev1, btn_prev2;
+
+    always_ff @( posedge clk ) begin 
+        if(reset) begin
+            btn_prev1 <= 0;
+            btn_prev2 <= 0;
+        end else begin
+            btn_prev1 <= btn_start;
+            btn_prev2 <= btn_prev1;
+        end
+    end
+
+    assign start_push = ~btn_prev2 & btn_prev1;
+
     always_ff @(posedge clk, posedge reset) begin
         if (reset) begin
             state     <= IDLE;
@@ -63,7 +81,7 @@ module i2c_demo_top (
                     cmd_write <= 1'b0;
                     cmd_read  <= 1'b0;
                     cmd_stop  <= 1'b0;
-                    if (sw[0]) begin
+                    if (start_push) begin
                         state <= START;
                     end
                 end
@@ -81,11 +99,16 @@ module i2c_demo_top (
                     cmd_write <= 1'b1;
                     cmd_read  <= 1'b0;
                     cmd_stop  <= 1'b0;
-                    tx_data   <= SLA_W;
+                    if (!sw_wr) tx_data <= {SLA, 1'b0};  //write
+                    else tx_data <= {SLA, 1'b1};  //read
+
                     if (done) begin
-                        if (!ack_out) state <= WRITE;
-                        else state <= STOP;
-                        state <= WRITE;
+                        if (ack_out) begin  //NACK
+                            state <= STOP;
+                        end else begin
+                            if (!sw_wr) state <= WRITE;
+                            else state <= READ;
+                        end
                     end
                 end
                 WRITE: begin
@@ -93,11 +116,22 @@ module i2c_demo_top (
                     cmd_write <= 1'b1;
                     cmd_read  <= 1'b0;
                     cmd_stop  <= 1'b0;
-                    tx_data   <= sw[8:1];
+                    tx_data   <= sw_data[7:0];
                     if (done) begin
                         if (!ack_out) state <= STOP;
                         else state <= STOP;
-                        state <= STOP;
+                    end
+                end
+                READ: begin
+                    cmd_start <= 1'b0;
+                    cmd_write <= 1'b0;
+                    cmd_read  <= 1'b1;
+                    cmd_stop  <= 1'b0;
+                    ack_in    <= 1'b1;
+                    if (done) begin
+                        led_data  <= rx_data;
+                        if (!ack_out) state <= STOP;
+                        else state <= STOP;
                     end
                 end
                 STOP: begin

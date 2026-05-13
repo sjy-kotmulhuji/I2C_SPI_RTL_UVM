@@ -1,43 +1,5 @@
 `timescale 1ns / 1ps
 
-module I2C_Master (
-    input logic clk,
-    input logic reset,
-    //command port
-    input logic cmd_start,
-    input logic cmd_write,
-    input logic cmd_read,
-    input logic cmd_stop,
-    input  logic [7:0] tx_data, //write일 때 slave에 전달할 값 host에서 받아옴
-    //ack신호(0) 줄지 nack신호(1) 줄지 host에서 받아옴
-    input logic ack_in,
-    //internal output
-    output logic [7:0] rx_data,  //read일 때 slave에서 받아온 값
-    output logic done,
-    //slave -> master로 보낸 ACK/NACK 신호를 host에서 판단함
-    output logic ack_out,
-    output logic busy,
-    //external I2C port
-    output logic scl,
-    inout wire sda
-);
-
-    //SDA port 연결
-    logic sda_o, sda_i;
-
-    assign sda_i = (sda === 1'bz) ? 1'b1 : sda;
-    //assign sda_i = sda;
-    //assign sda   = sda_o;
-    assign sda   = sda_o ? 1'bz : 1'b0;
-
-    i2c_master U_I2C_MASTER (
-        .*,
-        .sda_o(sda_o),
-        .sda_i(sda_i)
-    );
-
-endmodule
-
 module i2c_master (
     input logic clk,
     input logic reset,
@@ -58,9 +20,14 @@ module i2c_master (
     output logic       busy,
     //external I2C port
     output logic       scl,
-    output logic       sda_o,
-    input  logic       sda_i
+    inout  wire        sda
 );
+
+    //SDA port 연결
+    logic sda_o, sda_i;
+
+    assign sda_i = (sda === 1'bz) ? 1'b1 : sda;
+    assign sda   = sda_o ? 1'bz : 1'b0;
 
     typedef enum logic [2:0] {
         IDLE = 3'b000,

@@ -44,9 +44,9 @@ module tb_i2c_top ();
         @(posedge clk);
     endtask
 
-    task i2c_addr(byte addr);
+    task i2c_addr(bit wr);
         //tx_data = address(8'h12) + read(1)/write(0) 신호
-        tx_data = (SLA << 1) + 1'b0;  //8bit 주소 한 자리 shift 하고 LSB에 r/w 신호 넣어줌
+        tx_data = (SLA << 1) + wr;  //8bit 주소 한 자리 shift 하고 LSB에 r/w 신호 넣어줌
         cmd_start = 1'b0;
         cmd_write = 1'b1;
         cmd_read = 1'b0;
@@ -97,7 +97,7 @@ module tb_i2c_top ();
         @(posedge clk);
 
         i2c_start();
-        i2c_addr(SLA << 1 + 1'b0);
+        i2c_addr(0);
         i2c_write(8'h55);
 
         //i2c_start();
@@ -107,18 +107,11 @@ module tb_i2c_top ();
         //i2c_start();
         //i2c_addr(SLA << 1 + 1'b0);
         i2c_write(8'h01);
+        i2c_stop();
+
+        i2c_start();
+        i2c_addr(1);
         i2c_read();
-
-        //i2c_start();
-        //i2c_addr(SLA << 1 + 1'b0);
-        i2c_write(8'h02);
-
-        //i2c_start();
-        //i2c_addr(SLA << 1 + 1'b0);
-        i2c_write(8'h03);
-        //i2c_write(8'h04);
-        //i2c_write(8'h05);
-        //i2c_write(8'hff);
         i2c_stop();
 
         #100;

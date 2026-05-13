@@ -18,51 +18,18 @@ module i2c_top (
     logic scl;
     wire  sda;
 
-
-
-    I2C_Master U_I2C_M (
-        .clk  (clk),
-        .reset(reset),
-
-        .cmd_start(cmd_start),
-        .cmd_write(cmd_write),
-        .cmd_read (cmd_read),
-        .cmd_stop (cmd_stop),
-        .tx_data  (tx_data),
-
-        .ack_in(ack_in),
-
-        .rx_data(),
-        .done   (done),
-
-        .ack_out(ack_out),
-        .busy(busy),
-
+    i2c_master U_I2C_MASTER (
+        .*,
         .scl(scl),
         .sda(sda)
     );
 
-
-    I2C_Slave U_I2C_S (
-
-        .clk    (clk),
-        .reset  (reset),
+    i2c_slave U_I2C_SLAVE (
         .tx_data(8'h05),
         .rx_data(),
-        .scl    (scl),
-        .sda    (sda)
+        .scl(scl),
+        .sda(sda),
+        .done()
     );
-
-    //I2C_slave_2 U_I2C_S (
-    //
-    //    .clk    (clk),
-    //    .reset  (reset),
-    //    .tx_data(8'h05),
-    //    .rx_data(),
-    //    .done   (),
-    //    .scl    (scl),
-    //    .sda    (sda)
-    //);
-
 
 endmodule
