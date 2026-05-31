@@ -78,7 +78,7 @@
 
 **UVM 구조**
 
-<img width="1006" height="1016" alt="image" src="https://github.com/user-attachments/assets/e1136493-06fa-4029-afa9-930d4aa0f30c" />
+<img width="500" height="503" alt="image" src="https://github.com/user-attachments/assets/e1136493-06fa-4029-afa9-930d4aa0f30c" />
 
 
 **검증 시나리오**
