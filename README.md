@@ -22,6 +22,8 @@
 
 ## 📡 SPI (Serial Peripheral Interface)
 
+<img width="1696" height="1321" alt="image" src="https://github.com/user-attachments/assets/be28e90c-92a6-4cd0-8cf1-e9f03ea64477" />
+
 ### 개요
 
 | 항목 | 내용 |
@@ -38,6 +40,9 @@
 | `MISO` | Slave → Master | Slave Out Master In — Slave가 Master에 데이터 전송 |
 | `SS` | Master → Slave | Slave Select — 통신할 Slave 선택 신호 |
 
+### Timing Diagram
+<img width="1919" height="1035" alt="image" src="https://github.com/user-attachments/assets/e8c272d6-1514-47ae-8804-c5361df61ca1" />
+
 ### 동작 모드 (CPOL / CPHA)
 
 | 모드 | CPOL | CPHA | IDLE 상태 | 샘플링 엣지 |
@@ -50,7 +55,7 @@
 - **CPOL** : Clock Polarity — IDLE 상태의 클락 레벨
 - **CPHA** : Clock Phase — 데이터 샘플링 엣지 선택
 
-### Master FSM
+### SPI Master FSM
 
 | 상태 | 설명 |
 |------|------|
@@ -59,7 +64,19 @@
 | `DATA` | 데이터 통신이 이루어지는 상태 |
 | `STOP` | 통신을 끝내는 단계 |
 
+<img width="1924" height="809" alt="image" src="https://github.com/user-attachments/assets/432f4dee-aa78-40f4-a137-d4d5c13efcf8" />
+
+### SPI Master ASM
+
+<img width="1600" height="1582" alt="image" src="https://github.com/user-attachments/assets/e828c0ce-2633-445c-81c7-dc64f79802ae" />
+
+
 ### UVM 검증
+
+**UVM 구조**
+
+<img width="1006" height="1016" alt="image" src="https://github.com/user-attachments/assets/e1136493-06fa-4029-afa9-930d4aa0f30c" />
+
 
 **검증 시나리오**
 
@@ -68,14 +85,6 @@
 | MOSI 동작 검증 | Master의 `tx_data`가 Slave의 `rx_data`로 정상 전송되는지 확인 |
 | MISO 동작 검증 | Slave의 `tx_data`가 Master의 `rx_data`로 정상 전송되는지 확인 |
 
-**Coverage**
-
-| Coverpoint | 항목 |
-|-----------|------|
-| `m_tx_data` | Master 송신 데이터 |
-| `s_rx_data` | Slave 수신 데이터 |
-| `s_tx_data` | Slave 송신 데이터 |
-| `m_rx_data` | Master 수신 데이터 |
 
 ### FPGA 동작 시연
 
@@ -86,6 +95,8 @@
 ---
 
 ## 🔗 I2C (Inter-Integrated Circuit)
+
+<img width="2100" height="513" alt="image" src="https://github.com/user-attachments/assets/56bf58a9-d2d1-499d-964f-33291a24e7e5" />
 
 ### 개요
 
@@ -105,6 +116,9 @@
 
 ### 동작 흐름 (Master 기준)
 
+**Timing Diagram**
+<img width="2296" height="450" alt="image" src="https://github.com/user-attachments/assets/e0ec8174-3eac-4576-a870-95b3f4932537" />
+
 ```
 START
   → 7bit Slave 주소 + 1bit R/W 신호 전송 (SDA)
@@ -115,6 +129,8 @@ STOP
 ```
 
 ### Master FSM
+
+<img width="2162" height="1090" alt="image" src="https://github.com/user-attachments/assets/df1be2f1-2ad0-4cc3-b30d-a4e54aa34f0b" />
 
 | 상태 | 설명 |
 |------|------|
@@ -127,6 +143,8 @@ STOP
 
 ### Slave FSM
 
+<img width="2162" height="788" alt="image" src="https://github.com/user-attachments/assets/4f9f9738-1514-4275-bdf7-84736ad6e816" />
+
 | 상태 | 설명 |
 |------|------|
 | `IDLE` | 동작 전 기본 상태 |
@@ -136,6 +154,10 @@ STOP
 | `DATA_ACK` | 통신에 대한 ACK 응답 상태 |
 
 ### UVM 검증
+
+**UVM 구조**
+
+<img width="1006" height="1016" alt="image" src="https://github.com/user-attachments/assets/579d7567-e1c5-4629-a144-de604e224a3f" />
 
 **검증 시나리오**
 
