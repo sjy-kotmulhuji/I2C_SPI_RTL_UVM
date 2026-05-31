@@ -30,6 +30,8 @@
 |------|------|
 | 연결 구조 | 1 : N |
 | 통신 방식 | Full-Duplex (동시 송수신 가능) |
+| 특징 | 전송 속도가 매우 빠름 |
+| 주 사용처 | 대용량 데이터를 실시간으로 빠르게 처리해야 하는 장치 |
 
 ### 신호선
 
@@ -88,7 +90,11 @@
 
 ### FPGA 동작 시연
 
-- **구성** : 좌측 Slave 보드 / 우측 Master 보드
+**Block Diagram**
+
+<img width="2980" height="1407" alt="image" src="https://github.com/user-attachments/assets/238af835-aa69-48f7-b8c3-c70c097400f2" />
+
+- **구성** :  2개의 Basys3 보드(Master/Slave)
 - **Write** : Master의 8bit 스위치 값을 Slave가 받아 FND에 표현
 - **Read** : Slave의 8bit 스위치 값을 Master가 받아 FND에 표현
 
@@ -105,7 +111,7 @@
 | 연결 구조 | N : N |
 | 통신 방식 | Half-Duplex (동시 송수신 불가) |
 | 신호선 구동 | 오픈 드레인 방식 + 외부 Pull-up 저항 |
-| 주 용도 | 저속 데이터 전송 |
+| 주 사용처 | 데이터 전송 속도가 중요하지 않고 간단한 연결이 필요한 장치 |
 
 ### 신호선
 
@@ -156,7 +162,6 @@ STOP
 ### UVM 검증
 
 **UVM 구조**
-
 <img width="1006" height="1016" alt="image" src="https://github.com/user-attachments/assets/579d7567-e1c5-4629-a144-de604e224a3f" />
 
 **검증 시나리오**
@@ -171,7 +176,10 @@ STOP
 
 ### FPGA 동작 시연
 
-- **구성** : 좌측 Slave 보드 / 우측 Master 보드
+**Block Diagram**
+<img width="2282" height="962" alt="image" src="https://github.com/user-attachments/assets/d041ae8a-310c-4190-bc93-00511a0668c4" />
+
+- **구성** : 2개의 Basys3 보드(Master/Slave), Pull-up 저항
 - **Write** : Master의 스위치 8개(`sw[8:1]`) 값을 Slave가 받아 LED 8개에 표현
 
 ---
