@@ -33,6 +33,7 @@
 | 특징 | 전송 속도가 매우 빠름 |
 | 주 사용처 | 대용량 데이터를 실시간으로 빠르게 처리해야 하는 장치 |
 
+
 ### 신호선
 
 | 신호 | 방향 | 설명 |
@@ -59,14 +60,14 @@
 
 ### SPI Master FSM
 
+<img width="1924" height="809" alt="image" src="https://github.com/user-attachments/assets/432f4dee-aa78-40f4-a137-d4d5c13efcf8" />
+
 | 상태 | 설명 |
 |------|------|
 | `IDLE` | 동작 전 기본 상태 |
 | `START` | 통신 시작 상태 |
 | `DATA` | 데이터 통신이 이루어지는 상태 |
 | `STOP` | 통신을 끝내는 단계 |
-
-<img width="1924" height="809" alt="image" src="https://github.com/user-attachments/assets/432f4dee-aa78-40f4-a137-d4d5c13efcf8" />
 
 ### SPI Master ASM
 
