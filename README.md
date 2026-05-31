@@ -48,15 +48,15 @@
 
 ### 동작 모드 (CPOL / CPHA)
 
+- **CPOL** : Clock Polarity — IDLE 상태의 클락 레벨
+- **CPHA** : Clock Phase — 데이터 샘플링 엣지 선택
+
 | 모드 | CPOL | CPHA | IDLE 상태 | 샘플링 엣지 |
 |------|:----:|:----:|----------|-----------|
 | Mode 0 | 0 | 0 | Low | 첫 번째 엣지 |
 | Mode 1 | 0 | 1 | Low | 두 번째 엣지 |
 | Mode 2 | 1 | 0 | High | 첫 번째 엣지 |
 | Mode 3 | 1 | 1 | High | 두 번째 엣지 |
-
-- **CPOL** : Clock Polarity — IDLE 상태의 클락 레벨
-- **CPHA** : Clock Phase — 데이터 샘플링 엣지 선택
 
 ### SPI Master FSM
 
@@ -181,7 +181,8 @@ STOP
 <img width="2282" height="962" alt="image" src="https://github.com/user-attachments/assets/d041ae8a-310c-4190-bc93-00511a0668c4" />
 
 - **구성** : 2개의 Basys3 보드(Master/Slave), Pull-up 저항
-- **Write** : Master의 스위치 8개(`sw[8:1]`) 값을 Slave가 받아 LED 8개에 표현
+- **Write** : Master의 스위치 8개(`sw[7:0]`) 값을 Slave가 받아 LED 8개에 표현
+- **Read** : Slave의 스위치 8개(`sw[7:0]`) 값을 Master가 받아 LED 8개에 표현
 
 ---
 
