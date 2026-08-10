@@ -121,12 +121,14 @@ https://github.com/user-attachments/assets/44a581b3-87ab-414a-967e-2a018b2152f9
 
 ### 개요
 
-| 항목 | 내용 |
-|------|------|
-| 연결 구조 | N : N |
-| 통신 방식 | Half-Duplex (동시 송수신 불가) |
-| 신호선 구동 | 오픈 드레인 방식 + 외부 Pull-up 저항 |
-| 주 사용처 | 데이터 전송 속도가 중요하지 않고 간단한 연결이 필요한 장치 |
+* N : N 연결 구조 사용
+* Half-Duplex (동시 송수신 불가) 방식
+* 공통 신호선 오픈 드레인 방식 + 외부 Pull-up 저항으로 구동
+* 데이터 전송 속도가 중요하지 않고 간단한 연결이 필요한 장치에 주로 사용
+* 장점: 주변장치가 늘어나도 배선 2개로 해결됨
+* 단점: 거리가 멀어지면 신호가 약해짐
+
+---
 
 ### 신호선
 
@@ -135,9 +137,11 @@ https://github.com/user-attachments/assets/44a581b3-87ab-414a-967e-2a018b2152f9
 | `SCL` | Master → Slave | Master가 생성하는 클락, 모든 디바이스와 공유 |
 | `SDA` | Master ↔ Slave | Master/Slave 간 양방향 데이터 전송 |
 
+---
+
 ### 동작 흐름 (Master 기준)
 
-**Timing Diagram**
+#### Timing Diagram
 <img width="2296" height="450" alt="image" src="https://github.com/user-attachments/assets/e0ec8174-3eac-4576-a870-95b3f4932537" />
 
 ```
@@ -148,6 +152,8 @@ START
   → ACK / NACK 송수신
 STOP
 ```
+
+---
 
 ### Master FSM
 
