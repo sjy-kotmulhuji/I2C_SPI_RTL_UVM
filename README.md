@@ -14,30 +14,28 @@
 
 ## 개발 환경
 
-- Language: SystemVerilog
-- Tool: Vivado (Simulation), VCS, Verdi
-- Verification: UVM (Universal Verification Methodology)
+- **Language**: SystemVerilog
+- **Tool**: Vivado (Simulation), VCS, Verdi
+- **Verification**: UVM (Universal Verification Methodology)
 
 ---
 
 ## SPI (Serial Peripheral Interface)
 
-<img width="1300" height="1000" alt="image" src="https://github.com/user-attachments/assets/be28e90c-92a6-4cd0-8cf1-e9f03ea64477" />
-
 ### 개요
-
+* 클럭 동기식 직렬 통신
 * 1 : N 연결 구조 사용
 * Full-Duplex (동시 송수신 가능) 통신 방식
-* 전송 속도가 매우 빠름
-* 주 사용처 | 대용량 데이터를 실시간으로 빠르게 처리해야 하는 장치 |
+* 대용량 데이터를 실시간으로 빠르게 처리해야 하는 장치에 주로 사용
+* 장점: 구조가 단순하고 전용 클럭에 동기화되므로 전송 속도가 매우 빠름
+* 단점: 연결할 Slave가 늘어날수록 연결선이 많아짐
 
-| 항목 | 내용 |
-|------|------|
-| 연결 구조 | 1 : N |
-| 통신 방식 | Full-Duplex (동시 송수신 가능) |
-| 특징 | 전송 속도가 매우 빠름 |
-| 주 사용처 | 대용량 데이터를 실시간으로 빠르게 처리해야 하는 장치 |
+---
 
+### 구조
+<img width="750" height="550" alt="image" src="https://github.com/user-attachments/assets/be28e90c-92a6-4cd0-8cf1-e9f03ea64477" />
+
+---
 
 ### 신호선
 
@@ -48,8 +46,12 @@
 | `MISO` | Slave → Master | Slave Out Master In — Slave가 Master에 데이터 전송 |
 | `SS` | Master → Slave | Slave Select — 통신할 Slave 선택 신호 |
 
+---
+
 ### Timing Diagram
-<img width="1919" height="1035" alt="image" src="https://github.com/user-attachments/assets/e8c272d6-1514-47ae-8804-c5361df61ca1" />
+<img width="700" height="350" alt="image" src="https://github.com/user-attachments/assets/e8c272d6-1514-47ae-8804-c5361df61ca1" />
+
+---
 
 ### 동작 모드 (CPOL / CPHA)
 
@@ -63,17 +65,15 @@
 | Mode 2 | 1 | 0 | High | 첫 번째 엣지 |
 | Mode 3 | 1 | 1 | High | 두 번째 엣지 |
 
-### SPI Master
+---
 
-| FSM | ASM |
-|------|------|
-| <img width="1200" height="509" alt="image" src="https://github.com/user-attachments/assets/432f4dee-aa78-40f4-a137-d4d5c13efcf8" /> | <img width="800" height="795" alt="image" src="https://github.com/user-attachments/assets/e828c0ce-2633-445c-81c7-dc64f79802ae" /> |
+### SPI Master / Slave 설계
 
+|  SPI Master FSM | SPI Master ASM | SPI Slave ASM |
+|------|------|------|
+| <img width="850" height="309" alt="image" src="https://github.com/user-attachments/assets/432f4dee-aa78-40f4-a137-d4d5c13efcf8" /> | <img width="800" height="795" alt="image" src="https://github.com/user-attachments/assets/e828c0ce-2633-445c-81c7-dc64f79802ae" /> | <img width="350" height="750" alt="image" src="https://github.com/user-attachments/assets/dacddb52-48f2-4790-b396-84c3bee6da3b" /> |
 
-### SPI Slave
-#### ASM
-<img width="380" height="800" alt="image" src="https://github.com/user-attachments/assets/dacddb52-48f2-4790-b396-84c3bee6da3b" />
-
+---
 
 ### UVM 검증
 
@@ -81,6 +81,7 @@
 
 <img width="500" height="503" alt="image" src="https://github.com/user-attachments/assets/e1136493-06fa-4029-afa9-930d4aa0f30c" />
 
+---
 
 **검증 시나리오**
 
@@ -89,16 +90,28 @@
 | MOSI 동작 검증 | Master의 `tx_data`가 Slave의 `rx_data`로 정상 전송되는지 확인 |
 | MISO 동작 검증 | Slave의 `tx_data`가 Master의 `rx_data`로 정상 전송되는지 확인 |
 
+---
 
-### FPGA 동작 시연
+### FPGA 보드 구성
 
 **Block Diagram**
 
 <img width="2980" height="1407" alt="image" src="https://github.com/user-attachments/assets/238af835-aa69-48f7-b8c3-c70c097400f2" />
 
 - **구성** :  2개의 Basys3 보드(Master/Slave)
-- **Write** : Master의 8bit 스위치 값을 Slave가 받아 FND에 표현
-- **Read** : Slave의 8bit 스위치 값을 Master가 받아 FND에 표현
+- **Write** : Master의 8bit 스위치 데이터를 Slave가 받아 FND에 표현
+- **Read** : Slave의 8bit 스위치 데이터를 Master가 받아 FND에 표현
+
+---
+
+### 동작 영상
+
+
+
+https://github.com/user-attachments/assets/44a581b3-87ab-414a-967e-2a018b2152f9
+
+
+
 
 ---
 
