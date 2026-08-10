@@ -90,6 +90,16 @@
 | MOSI 동작 검증 | Master의 `tx_data`가 Slave의 `rx_data`로 정상 전송되는지 확인 |
 | MISO 동작 검증 | Slave의 `tx_data`가 Master의 `rx_data`로 정상 전송되는지 확인 |
 
+**검증 결과**
+
+| Log | Waveform | Coverage |
+|------|------|------|
+|<img width="913" height="365" alt="image" src="https://github.com/user-attachments/assets/eb1cf4fd-f933-4abf-b835-09710ae9cc30" /> | <img width="1803" height="583" alt="image" src="https://github.com/user-attachments/assets/bdd55301-9744-4364-ae15-11341f64f804" /> | <img width="794" height="230" alt="image" src="https://github.com/user-attachments/assets/fe6c46ce-8900-493b-887f-70930927da64" />
+
+
+
+
+
 ---
 
 ### FPGA 보드 구성
@@ -155,35 +165,22 @@ STOP
 
 ---
 
-### Master FSM
+### I2C Master / Slave 설계
 
-<img width="2162" height="1090" alt="image" src="https://github.com/user-attachments/assets/df1be2f1-2ad0-4cc3-b30d-a4e54aa34f0b" />
-
-| 상태 | 설명 |
+|  I2C Master FSM | I2C Slave FSM |
 |------|------|
-| `IDLE` | 동작 전 기본 상태 |
-| `START` | 통신 시작 동작 |
-| `WAIT_CMD` | Host의 커맨드 신호에 따라 다음 상태 결정 |
-| `DATA` | 데이터 통신이 이루어지는 상태 |
-| `DATA_ACK` | 데이터 통신에 대한 ACK 응답 송수신 |
-| `STOP` | 통신을 끝내는 단계 |
+| <img width="2162" height="1090" alt="image" src="https://github.com/user-attachments/assets/df1be2f1-2ad0-4cc3-b30d-a4e54aa34f0b" /> | <img width="2162" height="788" alt="image" src="https://github.com/user-attachments/assets/4f9f9738-1514-4275-bdf7-84736ad6e816" /> |
 
-### Slave FSM
+---
 
-<img width="2162" height="788" alt="image" src="https://github.com/user-attachments/assets/4f9f9738-1514-4275-bdf7-84736ad6e816" />
-
-| 상태 | 설명 |
-|------|------|
-| `IDLE` | 동작 전 기본 상태 |
-| `ADDR_RW` | Master가 Slave 주소 + R/W 신호를 전송하는 상태 |
-| `ADDR_ACK` | 해당 주소의 Slave가 ACK 응답하는 상태 |
-| `DATA` | 데이터 통신이 이루어지는 상태 |
-| `DATA_ACK` | 통신에 대한 ACK 응답 상태 |
 
 ### UVM 검증
 
 **UVM 구조**
-<img width="1006" height="1016" alt="image" src="https://github.com/user-attachments/assets/579d7567-e1c5-4629-a144-de604e224a3f" />
+
+<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/579d7567-e1c5-4629-a144-de604e224a3f" />
+
+---
 
 **검증 시나리오**
 
