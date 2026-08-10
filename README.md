@@ -1,30 +1,35 @@
 # SPI / I2C 통신 프로토콜 설계 및 UVM 검증
 
-> SPI, I2C 통신 프로토콜 Master/Slave 모듈 설계 및 UVM 기반 기능 검증 (SystemVerilog)
+> 온디바이스AI 시스템 반도체 설계 1기 | 송주연 | 대한상공회의소 서울기술교육센터 | 2026.04.20
 
 ---
 
-## 📌 프로젝트 개요
+## 프로젝트 개요
 
 - SPI, I2C 통신 프로토콜의 **Master / Slave 모듈** RTL 설계
 - **UVM** 환경 구축을 통한 각 프로토콜 동작 기능 검증
-- FPGA 보드에 연결해 실제 동작 확인
+- FPGA 보드에 연결해 SPI Master / Slave 실제 동작 확인
 
 ---
 
-## 🛠️ 개발 환경
+## 개발 환경
 
 - Language: SystemVerilog
-- Tool: Vivado (Simulation), VCS
+- Tool: Vivado (Simulation), VCS, Verdi
 - Verification: UVM (Universal Verification Methodology)
 
 ---
 
-## 📡 SPI (Serial Peripheral Interface)
+## SPI (Serial Peripheral Interface)
 
-<img width="1696" height="1321" alt="image" src="https://github.com/user-attachments/assets/be28e90c-92a6-4cd0-8cf1-e9f03ea64477" />
+<img width="1300" height="1000" alt="image" src="https://github.com/user-attachments/assets/be28e90c-92a6-4cd0-8cf1-e9f03ea64477" />
 
 ### 개요
+
+* 1 : N 연결 구조 사용
+* Full-Duplex (동시 송수신 가능) 통신 방식
+* 전송 속도가 매우 빠름
+* 주 사용처 | 대용량 데이터를 실시간으로 빠르게 처리해야 하는 장치 |
 
 | 항목 | 내용 |
 |------|------|
@@ -58,20 +63,16 @@
 | Mode 2 | 1 | 0 | High | 첫 번째 엣지 |
 | Mode 3 | 1 | 1 | High | 두 번째 엣지 |
 
-### SPI Master FSM
+### SPI Master
 
-<img width="1924" height="809" alt="image" src="https://github.com/user-attachments/assets/432f4dee-aa78-40f4-a137-d4d5c13efcf8" />
-
-| 상태 | 설명 |
+| FSM | ASM |
 |------|------|
-| `IDLE` | 동작 전 기본 상태 |
-| `START` | 통신 시작 상태 |
-| `DATA` | 데이터 통신이 이루어지는 상태 |
-| `STOP` | 통신을 끝내는 단계 |
+| <img width="1200" height="509" alt="image" src="https://github.com/user-attachments/assets/432f4dee-aa78-40f4-a137-d4d5c13efcf8" /> | <img width="800" height="795" alt="image" src="https://github.com/user-attachments/assets/e828c0ce-2633-445c-81c7-dc64f79802ae" /> |
 
-### SPI Master ASM
 
-<img width="1600" height="1582" alt="image" src="https://github.com/user-attachments/assets/e828c0ce-2633-445c-81c7-dc64f79802ae" />
+### SPI Slave
+#### ASM
+<img width="380" height="800" alt="image" src="https://github.com/user-attachments/assets/dacddb52-48f2-4790-b396-84c3bee6da3b" />
 
 
 ### UVM 검증
@@ -101,7 +102,7 @@
 
 ---
 
-## 🔗 I2C (Inter-Integrated Circuit)
+## I2C (Inter-Integrated Circuit)
 
 <img width="2100" height="513" alt="image" src="https://github.com/user-attachments/assets/56bf58a9-d2d1-499d-964f-33291a24e7e5" />
 
@@ -186,7 +187,7 @@ STOP
 
 ---
 
-## 🐛 Trouble Shooting
+## Trouble Shooting
 
 ### 1. I2C Slave FSM 동기화 클락 오류
 
