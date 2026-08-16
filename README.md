@@ -27,8 +27,8 @@
 * 1 : N 연결 구조 사용
 * Full-Duplex (동시 송수신 가능) 통신 방식
 * 대용량 데이터를 실시간으로 빠르게 처리해야 하는 장치에 주로 사용
-* 장점: 구조가 단순하고 전용 클럭에 동기화되므로 전송 속도가 매우 빠름
-* 단점: 연결할 Slave가 늘어날수록 연결선이 많아짐
+* **장점**: 구조가 단순하고 전용 클럭에 동기화되므로 전송 속도가 매우 빠름
+* **단점**: 연결할 Slave가 늘어날수록 연결선이 많아짐
 
 ---
 
@@ -92,7 +92,7 @@
 
 **검증 결과**
 
-| Log | Waveform | Coverage |
+| Log | Waveform(Verdi) | Coverage |
 |------|------|------|
 |<img width="913" height="365" alt="image" src="https://github.com/user-attachments/assets/eb1cf4fd-f933-4abf-b835-09710ae9cc30" /> | <img width="1803" height="583" alt="image" src="https://github.com/user-attachments/assets/bdd55301-9744-4364-ae15-11341f64f804" /> | <img width="794" height="230" alt="image" src="https://github.com/user-attachments/assets/fe6c46ce-8900-493b-887f-70930927da64" />
 
@@ -135,8 +135,8 @@ https://github.com/user-attachments/assets/44a581b3-87ab-414a-967e-2a018b2152f9
 * Half-Duplex (동시 송수신 불가) 방식
 * 공통 신호선 오픈 드레인 방식 + 외부 Pull-up 저항으로 구동
 * 데이터 전송 속도가 중요하지 않고 간단한 연결이 필요한 장치에 주로 사용
-* 장점: 주변장치가 늘어나도 배선 2개로 해결됨
-* 단점: 거리가 멀어지면 신호가 약해짐
+* **장점**: 주변장치가 늘어나도 배선 2개로 해결됨
+* **단점**: 거리가 멀어지면 신호가 약해짐
 
 ---
 
@@ -193,10 +193,16 @@ STOP
 | Write 검증 | Master의 `tx_data`가 Slave의 `rx_data`로 정상 전송되는지 확인 |
 | Read 검증 | Slave의 `tx_data`가 Master의 `rx_data`로 정상 전송되는지 확인 |
 
-> ⚠️ 파형 상으로는 Read/Write 동작 모두 정상이나, UVM Log에서 Fail 발생
-> 원인: UVM Monitor의 타이밍 오류로 추정
 
-### FPGA 동작 시연
+**검증 결과**
+
+| Waveform(Verdi) |
+|------|
+|<img width="1344" height="374" alt="image" src="https://github.com/user-attachments/assets/24e78004-3e17-434f-be11-d8364488d8ef" /> | 
+
+---
+
+### FPGA 보드 구성
 
 **Block Diagram**
 <img width="2282" height="962" alt="image" src="https://github.com/user-attachments/assets/d041ae8a-310c-4190-bc93-00511a0668c4" />
@@ -205,11 +211,23 @@ STOP
 - **Write** : Master의 스위치 8개(`sw[7:0]`) 값을 Slave가 받아 LED 8개에 표현
 - **Read** : Slave의 스위치 8개(`sw[7:0]`) 값을 Master가 받아 LED 8개에 표현
 
+
+---
+
+### 동작 영상
+
+
+
+https://github.com/user-attachments/assets/9d8677d5-3005-47e0-b8f6-1d721d8743f9
+
+
+
 ---
 
 ## Trouble Shooting
 
 ### 1. I2C Slave FSM 동기화 클락 오류
+<img width="634" height="374" alt="image" src="https://github.com/user-attachments/assets/9e51d894-7268-4085-9e01-1429446ffd88" />
 
 **문제**
 Slave FSM을 system clk 대신 SCL에 동기화하려 했으나 정상 동작 안 됨
@@ -227,10 +245,15 @@ system clk에 동기화하고, SCL과 SDA에 대한 **Edge Detector**를 설계�
 
 **문제**
 Write 동작에서 마지막 8번째 비트 데이터를 수신하지 못하는 상황
+<img width="1716" height="647" alt="image" src="https://github.com/user-attachments/assets/7ebc42dd-0bd1-4ad2-b4d9-bd5155b8997d" />
+
 
 **원인**
 - `ADDR_RW` 상태에서 Write 동작 시 SCL 하강 엣지에서 `bit_cnt` 증가하도록 구현
 - SCL이 IDLE 상태에서 High로 시작하므로 `ADDR_RW` 진입 시 하강 엣지를 먼저 인식해 `bit_cnt`가 1 증가
 
 **해결**
-SCL **상승 엣지**에서 `bit_cnt` 증가하도록 수정
+- SCL **상승 엣지**에서 `bit_cnt` 증가하도록 수정
+
+<img width="900" height="450" alt="image" src="https://github.com/user-attachments/assets/09496541-9780-48e2-a571-e59995aadd80" />
+
