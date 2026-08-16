@@ -167,9 +167,13 @@ STOP
 
 ### I2C Master / Slave 설계
 
-|  I2C Master FSM | I2C Slave FSM |
+|  I2C Master FSM | I2C Master ASM |
 |------|------|
-| <img width="2162" height="1090" alt="image" src="https://github.com/user-attachments/assets/df1be2f1-2ad0-4cc3-b30d-a4e54aa34f0b" /> | <img width="2162" height="788" alt="image" src="https://github.com/user-attachments/assets/4f9f9738-1514-4275-bdf7-84736ad6e816" /> |
+| <img width="1400" height="700" alt="image" src="https://github.com/user-attachments/assets/df1be2f1-2ad0-4cc3-b30d-a4e54aa34f0b" /> | <img width="3407" height="1478" alt="image" src="https://github.com/user-attachments/assets/b991bf9c-e3a0-4e6c-bcad-0f50f5689e92" /> |
+
+|  I2C Slave FSM | I2C Slave ASM |
+|------|------|
+| <img width="1400" height="600" alt="image" src="https://github.com/user-attachments/assets/4f9f9738-1514-4275-bdf7-84736ad6e816" /> | <img width="3322" height="1603" alt="image" src="https://github.com/user-attachments/assets/7e48acd9-0373-4b53-b8f7-be0519c775c8" /> |
 
 ---
 
