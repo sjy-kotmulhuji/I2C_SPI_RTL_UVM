@@ -14,9 +14,19 @@
 
 ## 개발 환경
 
-- **Language**: SystemVerilog
-- **Tool**: Vivado (Simulation), VCS, Verdi
-- **Verification**: UVM (Universal Verification Methodology)
+<table>
+<tr><td><b>Language</b></td><td>
+<img src="https://img.shields.io/badge/-SYSTEMVERILOG-00A99D?style=for-the-badge&logoColor=white"/>
+</td></tr>
+<tr><td><b>Tool</b></td><td>
+<img src="https://img.shields.io/badge/VIVADO_(SIMULATION)-006400?style=for-the-badge&logo=amd&logoColor=white"/>
+<img src="https://img.shields.io/badge/-VCS-000000?style=for-the-badge&logoColor=white"/>
+<img src="https://img.shields.io/badge/-VERDI-1A1A1A?style=for-the-badge&logoColor=white"/>
+</td></tr>
+<tr><td><b>Verification</b></td><td>
+<img src="https://img.shields.io/badge/UVM_(UNIVERSAL_VERIFICATION_METHODOLOGY)-FFC107?style=for-the-badge&logoColor=white"/>
+</td></tr>
+</table>
 
 ---
 
